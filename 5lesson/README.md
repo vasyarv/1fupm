@@ -4,7 +4,23 @@
 
 Рекурсия
 
-Ввод вывод строк
+##Пример ввода строк
+```c
+#include <stdio.h>
+
+int main () {
+	int d, i = 0;
+	char c;
+	scanf("%d",&d);
+	getchar();
+	while((c = getchar()) != '\n' && c != EOF) {
+		if ( (c - 48) == d ) 
+			i++;	
+	}	
+	printf("%d\n",i);
+	return 0;
+}
+```
 
 ##Статические переменные
 Переменные sp и val в файле stack.с, а также buf и bufp в getch.с находятся в личном пользовании
