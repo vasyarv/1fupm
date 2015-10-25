@@ -462,3 +462,73 @@ sys     0m0.023s
 $              
 ```
 
+####Запись в файл: системный вызов write()
+
+Для записи данных в файл используется системный вызов `write()`. 
+Ниже представлен его прототип.
+
+```c
+ssize_t write (int fd, const void * buffer, size_t count);
+```
+
+Как видите, прототип `write()` отличается от `read()` только спецификатором const во втором аргументе. 
+В принципе `write()` выполняет процедуру, обратную `read()`: записывает count байтов из буфера `buffer` в файл с дескриптором fd, возвращая количество записанных байтов или -1 в случае ошибки. 
+
+Так просто, что можно сразу переходить к примеру. 
+За основу возьмем программу myread1 из предыдущего раздела.
+
+```c
+/* rw.c */
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>	/* read(), write(), close() */
+#include <fcntl.h>	/* open(), O_RDONLY */
+#include <sys/stat.h>	/* S_IRUSR */
+#include <sys/types.h>	/* mode_t */
+
+#define BUFFER_SIZE	64
+
+int main (int argc, char ** argv)
+{
+	int fd;
+	ssize_t read_bytes;
+	ssize_t written_bytes;
+	char buffer[BUFFER_SIZE];
+	if (argc < 2)
+	{
+		fprintf (stderr, "Too few arguments\n");
+		exit (1);
+	}
+
+	fd = open (argv[1], O_RDONLY);
+	if (fd < 0)
+	{
+		fprintf (stderr, "Cannot open file\n");
+		exit (1);
+	}	
+	
+	while ((read_bytes = read (fd, buffer, BUFFER_SIZE)) > 0)
+	{		
+		/* 1 == stdout */
+		written_bytes = write (1, buffer, read_bytes);
+		if (written_bytes != read_bytes)
+		{
+			fprintf (stderr, "Cannot write\n");
+			exit (1);
+		}
+	}
+
+	if (read_bytes < 0)
+	{
+		fprintf (stderr, "myread: Cannot read file\n");
+		exit (1);
+	}
+	close (fd);
+	exit (0);
+}
+```
+
+В этом примере нам уже не надо изощеряться в попытках вставить нуль-терминатор в строку для записи, поскольку системный вызов write() не запишет большее количество байт, чем мы ему указали. 
+В данном случае для демонстрации write() мы просто записывали данные в файл с дескриптором 1, то есть в стандартный вывод. 
+Но прежде, чем переходить к чтению следующего раздела, попробуйте самостоятельно записать что-нибудь (при помощи write(), естественно) в обычный файл. 
+Когда будете открывать файл для записи, обратите пожалуйста внимание на флаги `O_TRUNC, O_CREAT,O_APPEND`. Подумайте, все ли флаги сочетаются между собой по смыслу.
