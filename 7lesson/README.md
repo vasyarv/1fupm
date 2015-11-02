@@ -157,3 +157,6 @@ car
 
 cat
 
+Еще хороший алгоритм - сортировка слиянием:
+
+http://algolist.manual.ru/sort/merge_sort.php
