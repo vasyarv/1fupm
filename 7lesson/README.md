@@ -160,3 +160,28 @@ cat
 Еще хороший алгоритм - сортировка слиянием:
 
 http://algolist.manual.ru/sort/merge_sort.php
+
+###Пример сортировки целого массива
+```c
+#include <stdlib.h>
+#include <stdio.h>
+
+int cmp_int(const void * p1, const void * p2) {
+  return *((int *)p1) -*((int *)p2);
+}
+
+int main(){
+  int a[1000];
+  int n,i;
+  scanf("%d",&n);
+  for (i=0;i<n;i++)
+      scanf("%d",&a[i]);
+  qsort(a,n,sizeof(int),cmp_int);
+
+
+  for (i=0;i<n;i++)
+      printf("%d ",a[i]);
+
+  return 0;
+}
+```
