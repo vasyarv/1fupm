@@ -8,6 +8,9 @@ http://www.jegerlehner.ch/intel/IntelCodeTable.pdf
 
 https://ru.wikipedia.org/wiki/AT%26T-%D1%81%D0%B8%D0%BD%D1%82%D0%B0%D0%BA%D1%81%D0%B8%D1%81
 
+Ассемблерные вставки:
+http://asmcourse.cs.msu.ru/wp-content/uploads/2013/04/gcc-inline-asm.pdf
+
 ###Ассемблерная вставка (Intel)
 
 ```c
