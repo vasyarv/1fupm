@@ -56,3 +56,15 @@ main:
  
         .size   main, . - main    /* размер функции main            */
 ```
+
+Компиляция:
+```bash
+gcc file.s -o file
+```
+
+В случае использование _start вместо main нужно компилить:
+
+```bash
+gcc -c file.s
+ld -s -o file file.o
+```
