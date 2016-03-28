@@ -1,3 +1,10 @@
+Синтаксис комманд - продолжение
+
+http://cs.mipt.ru/fileadmin/assembler/severov/2016/05-mashinnyi___uroven_2_Upravlenie.pdf
+
+http://cs.mipt.ru/fileadmin/assembler/severov/2016/06-mashinnyi___uroven_3_Procedury.pdf
+
+
 Пример программы HELLO WORLD
 
 ```asm
@@ -144,3 +151,79 @@ hello_str:
 Директива .set позволяет в качестве значения символа использовать арифметические выражения. 
 Мы из значения текущего адреса (метка «точка») вычитаем адрес начала строки — получаем длину строки в байтах. Потом мы вычитаем ещё единицу, потому что директива .string добавляет в конце строки нулевой байт (а на экран мы его выводить не хотим).
 
+###выравнивание
+Выравнивание задано у каждого фундаментального типа данных (типа данных, которым процессор может оперировать непосредственно). 
+Например, выравнивание word — 4 байта. 
+Это значит, что данные типа word должны располагаться по адресу, кратному 4 (например, 0x00000100, 0x03284478). 
+Архитектура рекомендует, но не требует выравнивания: доступ к невыровненным данным может быть медленнее, но принципиальной разницы нет и ошибки это не вызовет.
+
+Для соблюдения выравнивания в распоряжении программиста есть директива `.p2align`.
+
+```asm
+ .p2align степень_двойки, заполнитель, максимум
+```
+ 
+Директива .p2align выравнивает текущий адрес до заданной границы. 
+Граница выравнивания задаётся как степень числа 2: например, если вы указали .p2align 3 — следующее значение будет выровнено по 8-байтной границе. 
+Для выравнивания размещается необходимое количество байт-заполнителей со значением заполнитель. 
+Если для выравнивания требуется разместить более чем максимум байт-заполнителей, то выравнивание не выполняется.
+
+Второй и третий аргумент являются необязательными.
+
+
+##Пример - печать чисел Фиббоначи
+
+```asm
+        .global main
+
+        .text
+main:
+        push    %rbx                    # we have to save this since we use it
+
+        mov     $90, %ecx               # ecx will countdown to 0
+        xor     %rax, %rax              # rax will hold the current number
+        xor     %rbx, %rbx              # rbx will hold the next number
+        inc     %rbx                    # rbx is originally 1
+print:
+        # We need to call printf, but we are using eax, ebx, and ecx.  printf
+        # may destroy eax and ecx so we will save these before the call and
+        # restore them afterwards.
+
+        push    %rax                    # caller-save register
+        push    %rcx                    # caller-save register
+
+        mov     $format, %rdi           # set 1st parameter (format)
+        mov     %rax, %rsi              # set 2nd parameter (current_number)
+        xor     %rax, %rax              # because printf is varargs
+
+        # Stack is already aligned because we pushed three 8 byte registers
+        call    printf                  # printf(format, current_number)
+
+        pop     %rcx                    # restore caller-save register
+        pop     %rax                    # restore caller-save register
+
+        mov     %rax, %rdx              # save the current number
+        mov     %rbx, %rax              # next number is now current
+        add     %rdx, %rbx              # get the new next number
+        dec     %ecx                    # count down
+        jnz     print                   # if not done counting, do some more
+
+        pop     %rbx                    # restore rbx before returning
+        ret
+format:
+        .asciz  "%20ld\n"
+```
+###Соглашения о вызове
+
+1. Порядок, по которому выделяются регистры:
+
+Для целых: rdi, rsi, rdx, rcx, r8, r9.
+
+Для вещественных: (float, double), xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7
+
+After the parameters are pushed, the call instruction is made, so when the called function gets control, the return address is at (%rsp), the first memory parameter is at 8(%rsp), etc.
+2. Дополнительные параметры помещаются в стек, и удаляются вызывающей функцией после вызова
+3. После того как параметры засунуты в стек, сделан call , то адрес возврата лежит в  (%rsp), первый параметр памяти в  8(%rsp), и т.д.
+4. Указатель стека %RSP должен быть выровнен по 16-байтной границы перед совершением вызова. Процесс вызова делает push адреса возврата (8 байт) в стек, поэтому, когда функция получает управление - %RSP не выровнен. Нужно сделать это самостоятельно через push или вычитания из 8 из %rsp.
+5. Единственные регистры которые вызываемая функция должна сохранить это rbp, rbx, r12, r13, r14, r15. Остальные регистры могут быть изменены вызываемой функцией.
+6. Целые возвращаются в rax или rdx:rax, вещественные в xmm0 или xmm1:xmm0
