@@ -43,7 +43,9 @@ https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B5%D0%BF%D0%BE%D0%BB%D0%BD%D
 
 ftp://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_7.html
 
+Еще про стековый кадр и соглашение о вызове
 
+http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
 
 
 
