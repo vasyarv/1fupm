@@ -81,7 +81,7 @@ sss:
 
 .data
 input:   
-        .quad 0x10  #если убрать 0x10 то будет некорректно работать
+        .quad 
 format:
         .asciz "%ld"
 
