@@ -39,7 +39,9 @@ https://ru.wikipedia.org/wiki/%D0%9F%D0%B5%D1%80%D0%B5%D0%BF%D0%BE%D0%BB%D0%BD%D
 
 Возрват происходит в rax(eax,ax,...)
 
+Исследование стэка с помощью gdb
 
+ftp://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_7.html
 
 
 
