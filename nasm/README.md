@@ -1,5 +1,7 @@
 еще раз список команд: http://www.jegerlehner.ch/intel/IntelCodeTable.pdf
 
+вещественные числа https://courses.engr.illinois.edu/ece390/books/artofasm/CH14/CH14-4.html
+
 ##NASM
 
 Почему NASM?
