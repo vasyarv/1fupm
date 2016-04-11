@@ -72,7 +72,7 @@ sss:
 
 .data
 input:   
-        .quad 
+        .quad 0x0
 format:
         .asciz "%ld"
 
