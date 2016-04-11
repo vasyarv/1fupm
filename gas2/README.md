@@ -49,7 +49,7 @@ http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
 
 
 
-Пример работы со (scanf) и printf (без использования стэка)
+Пример число из регистра
 ```asm
 
 //увеличиваем число на 20, храним в rax
@@ -59,7 +59,7 @@ http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
 main:
 
 sss:
-        mov     $20, %rax
+        mov     $20, %rax #ЭТО ЧИСЛО, КОТОРОЕ БУДЕТ ПЕЧАТАТЬСЯ
 
         mov     $format, %rdi           # set 1st parameter (format)
         mov     %rax, %rsi              # set 2nd parameter (current_number)
@@ -71,8 +71,34 @@ sss:
         ret
 
 .data
+format:
+        .asciz "%ld"
+
+```
+
+
+Печатаем число из секции .data
+```asm
+
+//увеличиваем число на 20, храним в rax
+        .global main
+
+        .text
+main:
+
+sss:
+        mov     $format, %rdi           # set 1st parameter (format)
+        mov     input, %rsi              # set 2nd parameter (current_number)
+        xor     %rax, %rax              # because printf is varargs
+        sub     $8, %rsp                # align stack pointer
+        call    printf                  # printf(format, sum/count)
+        add     $8, %rsp                # restore stack pointer
+
+        ret
+
+.data
 input:   
-        .quad 0x0
+        .quad 20 #ЭТО ЧИСЛО, КОТОРОЕ БУДЕТ ПЕЧАТАТЬСЯ
 format:
         .asciz "%ld"
 
