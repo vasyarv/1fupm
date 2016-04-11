@@ -58,7 +58,6 @@ http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
         .text
 main:
 
-sss:
         mov     $20, %rax #ЭТО ЧИСЛО, КОТОРОЕ БУДЕТ ПЕЧАТАТЬСЯ
 
         mov     $format, %rdi           # set 1st parameter (format)
@@ -86,7 +85,6 @@ format:
         .text
 main:
 
-sss:
         mov     $format, %rdi           # set 1st parameter (format)
         mov     input, %rsi              # set 2nd parameter (current_number)
         xor     %rax, %rax              # because printf is varargs
@@ -99,6 +97,39 @@ sss:
 .data
 input:   
         .quad 20 #ЭТО ЧИСЛО, КОТОРОЕ БУДЕТ ПЕЧАТАТЬСЯ
+format:
+        .asciz "%ld"
+
+```
+
+
+Вводим число и печатаем из секции .data
+```asm
+
+//увеличиваем число на 20, храним в rax
+        .global main
+
+        .text
+main:
+        mov     $format, %rdi           # set 1st parameter (format)
+        mov     $input, %rsi              # set 2nd parameter (current_number)
+        xor     %rax, %rax              # because printf is varargs
+        sub     $8, %rsp                # align stack pointer
+        call    printf                  # printf(format, sum/count)
+        add     $8, %rsp                # restore stack pointer
+
+        mov     $format, %rdi           # set 1st parameter (format)
+        mov     input, %rsi              # set 2nd parameter (current_number)
+        xor     %rax, %rax              # because printf is varargs
+        sub     $8, %rsp                # align stack pointer
+        call    printf                  # printf(format, sum/count)
+        add     $8, %rsp                # restore stack pointer
+
+        ret
+
+.data
+input:   
+        .quad 20 #Теперь это число не будет печататься! Это число будет изменено scanf
 format:
         .asciz "%ld"
 
