@@ -6,7 +6,7 @@ https://ru.wikipedia.org/wiki/SSE
 
 Для вещественных операций используются 8(16) регистров xmm0,xmm1, ...
 
-Пример scanf:
+###Пример scanf:
 
 ```asm
         sub     $8, %rsp        # сдвигаем стэк, попутно аллоцируем 8 байт (сколько это бит?)
@@ -19,7 +19,7 @@ https://ru.wikipedia.org/wiki/SSE
         movsd   (%rsp), %xmm0   # а вот темерь в xmm0 лежит наше число
 ```
 
-А теперь пример printf?
+###А теперь пример printf?
 
 ```asm
         mov     $format, %rdi           # set 1st parameter (format)
@@ -33,7 +33,7 @@ https://ru.wikipedia.org/wiki/SSE
 
 Про функции с переменным числом аргументов: http://learnc.info/c/vararg_functions.html
 
-Печать целого числа из глобальных переменных:
+###Печать *целого* числа из глобальных переменных:
 
 ```asm
 .text
@@ -52,3 +52,24 @@ format:
 num:   
         .octa 3 #наше число
 ```
+
+###Печать *вещественного* числа из глобальных переменных:
+
+```asm
+        movsd   num_f, %xmm0
+
+        mov     $format, %rdi           # set 1st parameter (format)
+        mov     $1, %rax              # because printf is varargs
+        sub     $8, %rsp                # align stack pointer
+        call    printf                  # printf(format, sum/count)
+
+.data
+format:
+        .asciz "%lf"
+num_f:
+        .octa 0b0100000000001010011001100110011001100110011001100110011001100110 #двоичное представление double d = 3.3
+```
+
+Вещественнозначные операции:
+
+http://rayseyfarth.com/asm/pdf/ch11-floating-point.pdf
