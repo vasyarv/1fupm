@@ -73,3 +73,18 @@ num_f:
 Вещественнозначные операции:
 
 http://rayseyfarth.com/asm/pdf/ch11-floating-point.pdf
+
+Таблица syscall для x86_64 http://blog.rchapman.org/post/36801038863/linux-system-call-table-for-x86-64
+
+###Пример syscall для чтения байта
+```asm
+	mov    	$0, %rax        #0 - чтение
+	mov    	$0, %rdi        #0 - stdin
+	mov   	$num, %rsi      #память, куда читаем
+	mov    	$1, %rdx        #размер буфера
+	syscall
+
+.data
+num:
+        .byte 0                 #байт в памяти
+```
