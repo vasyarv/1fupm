@@ -21,14 +21,6 @@ https://ru.wikipedia.org/wiki/SSE
 
 А теперь пример printf?
 
-
-
-
-
-
-
-
-
 ```asm
         mov     $format, %rdi           # set 1st parameter (format)
         mov     $1, %rax                # because printf is varargs
@@ -38,3 +30,5 @@ https://ru.wikipedia.org/wiki/SSE
 ```
 
 Что напечает?
+
+Про функции с переменным числом аргументов: http://learnc.info/c/vararg_functions.html
