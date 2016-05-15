@@ -76,3 +76,5 @@ include <> "" определяет лишь в каких директориях
 man makefile
 
 http://mrbook.org/blog/tutorials/make/
+
+https://habrahabr.ru/post/155201/
